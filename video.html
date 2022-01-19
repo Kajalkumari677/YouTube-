@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div{
+            border:1px solid red;
+        }
+        #navbar{
+            height:100px;
+        }
+        #main{
+            display:flex;
+            height:400px;
+        }
+
+        #video_details{
+            /* one of the property which takes 3part here*/
+            flex:3
+        }
+        #recommendations{
+            /* it take 1 part */
+            flex:1;
+        }
+    </style>
+
+</head>
+<body>
+    
+    <div id="navbar">Navbar</div>
+
+    <div id="main">
+          <div id="video_details"></div>
+
+          <div id="recommendations"></div>
+    </div>
+  
+
+</body>
+</html>
+<script>
+    //1.we need to sho wthe video
+    //2.fetch clicked video from local storage
+
+
+    let video_data=JSON.parse(localStorage.getItem("clicked_video"))
+    console.log("video_data:",video_data)
+
+    //description->video_data.snippet.description
+
+    
+
+    let video_div=document.getElementById("video_details");
+
+    let iframe=document.createElement("iframe");
+
+    iframe.src=`https://www.youtube.com/embed/${video_data.videoId}`;
+
+    iframe.height="80%";
+    iframe.width="80%";
+
+    iframe.setAttribute("allowfullscreen",true);
+
+    video_div.append(iframe);
+
+
+
+
+</script>

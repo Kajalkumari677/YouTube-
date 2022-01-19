@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      #search_result{
+          display:grid;
+          grid-template-columns: repeat(4,22%);
+          grid-gap:5%;
+          row-gap: 2%;
+          justify-content: space-between;
+          margin-top: 5%;;
+      }
+
+     
+    </style>
+</head>
+<body>
+    <h1>Youtube</h1>
+    <input type="text" id="search"/>
+    <button onclick="searchvideos()">Search</button>
+    <div id="search_result"></div>
+
+</body>
+</html>
+<script>
+   
+    //1.instead of iframe, we need thumbnail(url)
+
+    let key="AIzaSyDSNLg_c8ej9c8lKegENfvfTcHeNZPL2Mw";
+
+    // let url="https://youtube.googleapis.com/youtube/v3/search?q=q&key=[YOUR_API_KEY]"
+
+    let search_result_div=document.getElementById("search_result"); 
+
+     async function searchvideos(){
+      try{
+          let inp = document.getElementById("search").value;
+
+         let res=await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${inp}&key=${key}&maxResults=30&part=snippet`)
+
+      //console.log("response",res)
+
+      let data= await res.json();
+      console.log(data)
+
+      let array_of_videos=data.items;
+      appendvideos(array_of_videos);
+
+      }
+      catch(err){
+          console.log("err",err)
+      }
+  }
+
+  //2. showing data on webpages
+
+    // function appendvideos(arr){ can be write as  below
+    const appendvideos=(arr)=>{
+      // arr.forEach(({snippet:{thumbnails:{medium:{url}}},id:{videoId}}) => { we can do in this way also
+
+        //console.log("url",url);
+        // console.log("videoId",videoId);
+
+        arr.forEach(({snippet,id:{videoId}}) => {
+
+          let url=snippet.thumbnails.medium.url;
+
+          let div=document.createElement("div")
+
+          let img=document.createElement("img");
+
+          img.src=url;
+
+          let title=snippet.title
+
+          let h4=document.createElement("h4");
+          h4.innerText=title;
+
+          let video_data={
+            snippet,
+            videoId,
+          };
+
+          // div.addEventListener("click",function(){ })we can do in this way also 
+          div.onclick=()=>{
+            showVideo(video_data);
+          };
+ 
+    
+
+          // let iframe = document.createElement("iframe") 
+          // iframe.src=`https://www.youtube.com/embed/${videoId}`;
+          
+          // iframe.width="350px";
+          // iframe.height="240px";
+
+          // iframe.setAttribute("allowfullscreen",true);
+
+
+
+
+          div.append(img,h4);
+          
+          search_result_div.append(div)
+
+
+
+
+        //   <iframe width="640"
+        //    height="360" 
+        //    src="https://www.youtube.com/embed/KXFmaE5B9E8" title="YouTube video player"
+        //     frameborder="0" 
+        //     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        //         allowfullscreen>
+        //     </iframe>
+      });
+
+       //action -click on video 
+       //expectation -play video on new page
+      //index.html->video.html
+
+      // function showVideo()
+      // {
+      //   alert("clicked on video")
+      // }
+      const showVideo = (video_data) =>{
+        //console.log("video_data",video_data)
+
+       
+        localStorage.setItem("clicked_video",JSON.stringify(video_data));
+        //  window.location.href="video.html";
+         window.open("video.html");
+
+      };
+
+  }
+
+
+
+
+
+
+
+
+</script>
